@@ -24,6 +24,8 @@ struct NavigationView: UIViewControllerRepresentable {
         }
     }
 
+    var route: MapboxDirections.Route
+
     // MARK: - UIViewControllerRepresentable
 
     func makeUIViewController(context: Context) -> some UIViewController {
@@ -36,8 +38,6 @@ struct NavigationView: UIViewControllerRepresentable {
                 sanJose
             ]
         )
-
-        let route = Route(legs: [], shape: nil, distance: 0, expectedTravelTime: 0)
 
         return NavigationViewController(
             for: route,

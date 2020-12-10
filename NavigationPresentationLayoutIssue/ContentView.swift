@@ -6,6 +6,14 @@
 //
 
 import SwiftUI
+import MapboxCoreNavigation
+import MapboxNavigation
+import MapboxDirections
+
+struct IdentifiableRoute: Identifiable {
+    let route: MapboxDirections.Route
+    let id = UUID()
+}
 
 struct ContentView: View {
 
@@ -13,7 +21,11 @@ struct ContentView: View {
     var text: String = ""
 
     @State
+    var navigateTo: IdentifiableRoute?
+
     var isPresentingNavigation: Bool = false
+
+    var fetcher = MapboxDirections.Directions()
 
     var body: some View {
 
@@ -26,15 +38,36 @@ struct ContentView: View {
             HStack {
 
                 Button("Show Navigation") {
-                    self.isPresentingNavigation = true
+
+                    let sanFrancisco = Waypoint(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194))
+                    let sanJose = Waypoint(coordinate: CLLocationCoordinate2D(latitude: 37.3382, longitude: -121.8863))
+                    let options = NavigationRouteOptions(
+                        waypoints: [
+                            sanFrancisco,
+                            sanJose
+                        ]
+                    )
+
+                    fetcher.calculate(options) { (session, result) in
+
+                        switch result {
+                        case let .success(response):
+                            if let route = response.routes?.first {
+                                self.navigateTo = IdentifiableRoute(route: route)
+                            }
+
+                        default:
+                            break
+                        }
+                    }
                 }
             }
 
 
         }
-        .sheet(isPresented: $isPresentingNavigation, content: {
-            NavigationView()
-        })
+        .sheet(item: $navigateTo) { item in
+            NavigationView(route: item.route)
+        }
     }
 }
 
