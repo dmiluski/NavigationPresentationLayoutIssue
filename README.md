@@ -31,7 +31,7 @@ If I use other UIViewController instances such as UIViewController instead of Ma
 
 ## 📱 Gifs
 
-| Presenting Mapbox NavigationViewController | Presenting Generic ViewController |
-| --- | --- |
-| ![withNavigationViewController](https://user-images.githubusercontent.com/5083390/101707686-91996800-3a40-11eb-9d1f-01ca351618da.gif) | ![withGenericViewController](https://user-images.githubusercontent.com/5083390/101707683-8fcfa480-3a40-11eb-9375-24d9f0851562.gif) |
-| For some odd reason, when presenting the Nav View, the keyboard avoidance goes haywire | When using a basic UIViewController it seems to behave fine |
+| Presenting Mapbox NavigationViewController | Presenting Generic ViewController | ImagePicker vs NavigationViewController's behavior |
+| --- | --- | --- |
+| ![withNavigationViewController](https://user-images.githubusercontent.com/5083390/101707686-91996800-3a40-11eb-9d1f-01ca351618da.gif) | ![withGenericViewController](https://user-images.githubusercontent.com/5083390/101707683-8fcfa480-3a40-11eb-9375-24d9f0851562.gif) | ![imagePickerVsNavigation](https://user-images.githubusercontent.com/5083390/101709628-ad067200-3a44-11eb-8093-12042d41666a.gif) |
+| For some odd reason, when presenting the Nav View, the keyboard avoidance goes haywire | When using a basic UIViewController it seems to behave fine | This is a clearer example of the differentiated behavior given ImagePickerView displays content inside |

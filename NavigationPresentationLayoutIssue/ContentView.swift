@@ -17,13 +17,29 @@ struct IdentifiableRoute: Identifiable {
 
 struct ContentView: View {
 
+    // MARK: - Types
+
+    enum Presentation: Identifiable {
+
+        /// Navigation is being displayed
+        case navigateTo(MapboxDirections.Route)
+
+        /// Image Picker is being displayed
+        case imagePicker
+
+        var id: String {
+            switch self {
+            case .navigateTo: return "navigation"
+            case .imagePicker: return "imagePicker"
+            }
+        }
+    }
+
     @State
     var text: String = ""
 
     @State
-    var navigateTo: IdentifiableRoute?
-
-    var isPresentingNavigation: Bool = false
+    var activePresentation: Presentation?
 
     var fetcher = MapboxDirections.Directions()
 
@@ -35,8 +51,12 @@ struct ContentView: View {
                 .padding()
                 .border(Color.black)
 
-            HStack {
+            HStack(spacing: 16) {
 
+                Button("Show Image Picker") {
+                    self.activePresentation = .imagePicker
+                }
+                
                 Button("Show Navigation") {
 
                     let sanFrancisco = Waypoint(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194))
@@ -53,7 +73,7 @@ struct ContentView: View {
                         switch result {
                         case let .success(response):
                             if let route = response.routes?.first {
-                                self.navigateTo = IdentifiableRoute(route: route)
+                                self.activePresentation = .navigateTo(route)
                             }
 
                         default:
@@ -61,13 +81,23 @@ struct ContentView: View {
                         }
                     }
                 }
+
+
             }
 
 
         }
-        .fullScreenCover(item: $navigateTo) { item in
-            NavigationView(route: item.route)
-                .ignoresSafeArea()
+        .fullScreenCover(item: $activePresentation) { item in
+            switch item {
+            case let .navigateTo(route):
+
+                NavigationView(route: route)
+                    .ignoresSafeArea()
+            case .imagePicker:
+
+                ImagePickerView()
+                    .ignoresSafeArea()
+            }
         }
     }
 }

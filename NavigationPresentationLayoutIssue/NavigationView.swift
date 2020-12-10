@@ -16,9 +16,6 @@ struct NavigationView: UIViewControllerRepresentable {
         /// NavigationView Instance
         var view: NavigationView
 
-        /// Used by Analytics to calculate actual directions duration
-        let navigationStartDate = Date()
-
         init(_ view: NavigationView) {
             self.view = view
         }
