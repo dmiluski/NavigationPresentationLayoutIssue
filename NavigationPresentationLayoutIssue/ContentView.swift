@@ -8,9 +8,33 @@
 import SwiftUI
 
 struct ContentView: View {
+
+    @State
+    var text: String = ""
+
+    @State
+    var isPresentingNavigation: Bool = false
+
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+
+        VStack {
+
+            TextField("Enter", text: $text)
+                .padding()
+                .border(Color.black)
+
+            HStack {
+
+                Button("Show Navigation") {
+                    self.isPresentingNavigation = true
+                }
+            }
+
+
+        }
+        .sheet(isPresented: $isPresentingNavigation, content: {
+            NavigationView()
+        })
     }
 }
 

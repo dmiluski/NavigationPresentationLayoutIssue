@@ -48,5 +48,12 @@
 	</array>
 	<key>MGLMapboxAccessToken</key>
 	<string></string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Testing</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>navigation</key>
+		<string>Test</string>
+	</dict>
 </dict>
 </plist>
