@@ -30,6 +30,10 @@ struct NavigationView: UIViewControllerRepresentable {
 
     func makeUIViewController(context: Context) -> some UIViewController {
 
+
+        // MARK: - See Here - Repro
+
+        // Code Reproducing Strange behavior
         let sanFrancisco = Waypoint(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194))
         let sanJose = Waypoint(coordinate: CLLocationCoordinate2D(latitude: 37.3382, longitude: -121.8863))
         let options = NavigationRouteOptions(
@@ -44,6 +48,11 @@ struct NavigationView: UIViewControllerRepresentable {
             routeIndex: 0,
             routeOptions: options
         )
+
+        // Code that seems to play friendly with Keyboard avoidance
+        // return UIViewController()
+
+
     }
 
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
