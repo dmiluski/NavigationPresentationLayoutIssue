@@ -65,8 +65,9 @@ struct ContentView: View {
 
 
         }
-        .sheet(item: $navigateTo) { item in
+        .fullScreenCover(item: $navigateTo) { item in
             NavigationView(route: item.route)
+                .ignoresSafeArea()
         }
     }
 }
