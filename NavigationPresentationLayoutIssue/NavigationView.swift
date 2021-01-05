@@ -40,16 +40,18 @@ struct NavigationView: UIViewControllerRepresentable {
             ]
         )
 
-        return NavigationViewController(
+        let initial = Date()
+        let viewController = NavigationViewController(
             for: route,
             routeIndex: 0,
             routeOptions: options
         )
-
-        // Code that seems to play friendly with Keyboard avoidance
-        // return UIViewController()
+        let final = Date()
 
 
+        print("Dane - NavigationView init Time: \(final.timeIntervalSince(initial))")
+
+        return viewController
     }
 
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {

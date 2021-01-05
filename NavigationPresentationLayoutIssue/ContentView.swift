@@ -29,11 +29,14 @@ struct ContentView: View {
 
         case web
 
+        case mapView
+
         var id: String {
             switch self {
             case .navigateTo: return "navigation"
             case .imagePicker: return "imagePicker"
             case .web: return "web"
+            case .mapView: return "mapview"
             }
         }
     }
@@ -51,6 +54,7 @@ struct ContentView: View {
         VStack {
 
             TextField("Enter", text: $text)
+                .disableAutocorrection(true)
                 .padding()
                 .border(Color.black)
 
@@ -89,19 +93,24 @@ struct ContentView: View {
                     self.activePresentation = .web
                 }
 
+                Button("Show MapView") {
+                    self.activePresentation = .mapView
+                }
+
 
             }
 
 
         }
         .padding()
-        .fullScreenCover(item: $activePresentation) { item in
+        .sheet(item: $activePresentation) { item in
 
             switch item {
             case let .navigateTo(route):
 
                 NavigationView(route: route)
                     .ignoresSafeArea()
+
             case .imagePicker:
 
                 ImagePickerView()
@@ -110,6 +119,10 @@ struct ContentView: View {
             case .web:
                 SafariView(url: URL(string: "https://www.google.com")!)
                     .ignoresSafeArea()
+
+            case .mapView:
+                MapView()
+                .ignoresSafeArea()
             }
         }
     }
