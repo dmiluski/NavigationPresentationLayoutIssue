@@ -47,7 +47,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MGLMapboxAccessToken</key>
-	<string></string>
+	<string>pk.eyJ1Ijoic3RyYWlnaHRhd2F5IiwiYSI6ImNqbXNibGZsbzAyMXEzd216OGc0YmJvYWUifQ.VjiVpQoZtPGmC-8Kwi52hw</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Testing</string>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>

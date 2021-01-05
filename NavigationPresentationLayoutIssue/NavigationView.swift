@@ -23,6 +23,9 @@ struct NavigationView: UIViewControllerRepresentable {
 
     var route: MapboxDirections.Route
 
+    // Requests to dismiss
+    var onDismiss: () -> Void
+
     // MARK: - UIViewControllerRepresentable
 
     func makeUIViewController(context: Context) -> some UIViewController {
@@ -40,11 +43,13 @@ struct NavigationView: UIViewControllerRepresentable {
             ]
         )
 
-        return NavigationViewController(
+        let viewController = NavigationViewController(
             for: route,
             routeIndex: 0,
             routeOptions: options
         )
+        viewController.delegate = context.coordinator
+        return viewController
 
         // Code that seems to play friendly with Keyboard avoidance
         // return UIViewController()
@@ -58,5 +63,12 @@ struct NavigationView: UIViewControllerRepresentable {
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
+    }
+}
+
+extension NavigationView.Coordinator: NavigationViewControllerDelegate {
+
+    func navigationViewControllerDidDismiss(_ navigationViewController: NavigationViewController, byCanceling canceled: Bool) {
+        self.view.onDismiss()
     }
 }

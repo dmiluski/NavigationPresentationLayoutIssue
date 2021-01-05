@@ -15,7 +15,10 @@ struct IdentifiableRoute: Identifiable {
     let id = UUID()
 }
 
+
 struct ContentView: View {
+
+    static var navigationWindow: UIWindow?
 
     // MARK: - Types
 
@@ -43,62 +46,93 @@ struct ContentView: View {
 
     var fetcher = MapboxDirections.Directions()
 
+    func showNavigation() {
+        let sanFrancisco = Waypoint(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194))
+        let sanJose = Waypoint(coordinate: CLLocationCoordinate2D(latitude: 37.3382, longitude: -121.8863))
+        let options = NavigationRouteOptions(
+            waypoints: [
+                sanFrancisco,
+                sanJose
+            ]
+        )
+
+        fetcher.calculate(options) { (session, result) in
+
+            switch result {
+            case let .success(response):
+
+                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                      let route = response.routes?.first else { return }
+
+                // Configure with reference to Scene
+                let window = UIWindow(windowScene: windowScene)
+
+                // Placeholder Containing RootViewController
+                let viewController = UIViewController()
+                viewController.view.backgroundColor = .clear
+                window.rootViewController = viewController
+                window.windowLevel = UIWindow.Level.statusBar - 1
+
+                // Store Strong Reference
+                window.makeKeyAndVisible()
+
+                // Configure Navigation
+                let navigationView = NavigationView(route: route) {
+
+                    Self.navigationWindow?.resignKey()
+
+                    // Cleanup
+                    Self.navigationWindow = nil
+
+                }
+                .ignoresSafeArea()
+
+                let host = UIHostingController(rootView: navigationView)
+                host.modalPresentationStyle = .fullScreen
+
+                // Present Navigation
+                window.rootViewController = host
+
+                Self.navigationWindow = window
+
+
+
+            default:
+                break
+            }
+        }
+    }
     var body: some View {
 
-        VStack {
+//        ScrollView {
+            VStack {
 
-            TextField("Enter", text: $text)
-                .padding()
-                .border(Color.black)
+                TextField("Enter", text: $text)
+                    .disableAutocorrection(true)
+                    .padding()
+                    .border(Color.black)
 
-            HStack(spacing: 16) {
-
-                Button("Show Image Picker") {
-                    self.activePresentation = .imagePicker
-                }
-                
                 Button("Show Navigation") {
-
-                    let sanFrancisco = Waypoint(coordinate: CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194))
-                    let sanJose = Waypoint(coordinate: CLLocationCoordinate2D(latitude: 37.3382, longitude: -121.8863))
-                    let options = NavigationRouteOptions(
-                        waypoints: [
-                            sanFrancisco,
-                            sanJose
-                        ]
-                    )
-
-                    fetcher.calculate(options) { (session, result) in
-
-                        switch result {
-                        case let .success(response):
-                            if let route = response.routes?.first {
-                                self.activePresentation = .navigateTo(route)
-                            }
-
-                        default:
-                            break
-                        }
-                    }
+                    showNavigation()
                 }
-
-
             }
+            .padding()
+//        }
 
 
-        }
-        .fullScreenCover(item: $activePresentation) { item in
-            switch item {
-            case let .navigateTo(route):
 
-                NavigationView(route: route)
-                    .ignoresSafeArea()
-            case .imagePicker:
-
-                ImagePickerView()
-                    .ignoresSafeArea()
-            }
-        }
+//        .fullScreenCover(item: $activePresentation) { item in
+//            switch item {
+//            case let .navigateTo(route):
+//
+//                NavigationView(route: route)
+//                    .ignoresSafeArea()
+//            case .imagePicker:
+//
+//                ImagePickerView()
+//                    .ignoresSafeArea()
+//            }
+//        }
     }
 }
 
