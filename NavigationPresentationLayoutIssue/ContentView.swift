@@ -27,10 +27,13 @@ struct ContentView: View {
         /// Image Picker is being displayed
         case imagePicker
 
+        case web
+
         var id: String {
             switch self {
             case .navigateTo: return "navigation"
             case .imagePicker: return "imagePicker"
+            case .web: return "web"
             }
         }
     }
@@ -82,12 +85,18 @@ struct ContentView: View {
                     }
                 }
 
+                Button("Show Web") {
+                    self.activePresentation = .web
+                }
+
 
             }
 
 
         }
+        .padding()
         .fullScreenCover(item: $activePresentation) { item in
+
             switch item {
             case let .navigateTo(route):
 
@@ -96,6 +105,10 @@ struct ContentView: View {
             case .imagePicker:
 
                 ImagePickerView()
+                    .ignoresSafeArea()
+
+            case .web:
+                SafariView(url: URL(string: "https://www.google.com")!)
                     .ignoresSafeArea()
             }
         }
